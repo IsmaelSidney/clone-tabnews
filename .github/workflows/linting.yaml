@@ -44,3 +44,22 @@ jobs:
       - run: npm ci
 
       - run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+  detect-secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install detect-secrets
+        run: pip install detect-secrets
+
+      - name: Run detect-secrets
+        run: |
+          # O comando 'git ls-files -z' lista todos os arquivos do repo
+          # O 'xargs -0' passa essa lista para o detect-secrets-hook
+          git ls-files -z | xargs -0 detect-secrets-hook --baseline .secrets.baseline
