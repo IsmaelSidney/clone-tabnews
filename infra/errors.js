@@ -1,5 +1,3 @@
-import status from "pages/api/v1/status";
-
 export class IntenalServerError extends Error {
   constructor({ cause }) {
     super("Um erro interno não esperado aconteceu", {
